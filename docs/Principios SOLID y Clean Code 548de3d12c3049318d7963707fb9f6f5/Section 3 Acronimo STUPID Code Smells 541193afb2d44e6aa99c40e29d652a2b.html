@@ -1,0 +1,685 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Section 3 : Acronimo STUPID / Code Smells</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.page-description {
+    margin-bottom: 2em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-uiBlue { background-color: rgba(35, 131, 226, .07); }
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-translucentGray { background-color: rgba(255, 255, 255, 0.0375); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+.select-value-color-pageGlass { background-color: undefined; }
+.select-value-color-washGlass { background-color: undefined; }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="541193af-b2d4-4e6a-a99c-40e29d652a2b" class="page sans"><header><div class="page-header-icon undefined"><span class="icon">👃🏻</span></div><h1 class="page-title">Section 3 : Acronimo STUPID / Code Smells</h1><p class="page-description"></p></header><div class="page-body"><p id="7cceae22-7cc6-4363-b101-9f8106d78e82" class="">
+</p><p id="f1262a62-356f-4698-b5f5-9659b774eb0e" class="">Esta es una sección corta y mayormente explicativa, en donde hablaremos sobre varios &quot;code smells&quot;.</p><p id="86d2394c-5ae9-4664-9f32-34e473103dbc" class="">La idea es evitar a toda costa estos puntos que hacen que nuestro código pierda calidad.</p><p id="0203f488-e492-401f-a611-26a298de33ef" class="">
+</p><figure class="block-color-gray_background callout" style="white-space:pre-wrap;display:flex" id="f28b095c-ff3d-481b-b473-9b8fff763d8b"><div style="font-size:1.5em"><span class="icon">💡</span></div><div style="width:100%">El acronimo STUPID son 6 code smells que debemos de evitar. (posibles indicios de que no hay algo bien en el codigo</div></figure><p id="50ca101f-f2f6-45de-bf38-c92bff6ec3da" class="">
+</p><ul id="2db7883d-27eb-48fa-b251-f89758364871" class="bulleted-list"><li style="list-style-type:disc"><strong>S</strong>ingleton: patron singleton</li></ul><ul id="f8e301df-18fb-49dd-8772-ccc6cfdbb75c" class="bulleted-list"><li style="list-style-type:disc"><strong>T</strong>ight Coupling: alto acoplamiento</li></ul><ul id="aea81572-da71-47b5-bbc4-0e59623fcd68" class="bulleted-list"><li style="list-style-type:disc"><strong>U</strong>ntestability: codigo no probable (unit test).</li></ul><ul id="2409638c-f700-4a5c-a543-1c5c7f8e2979" class="bulleted-list"><li style="list-style-type:disc"><strong>P</strong>remature optimization: optimizaciones prematuras</li></ul><ul id="4432af4f-7269-4d19-8ac1-a7694f2f20a2" class="bulleted-list"><li style="list-style-type:disc"><strong>I</strong> ndescriptive Naming: nombres poco descriptivos.</li></ul><ul id="9fb8287c-0063-4356-9e90-3359fc339b55" class="bulleted-list"><li style="list-style-type:disc"><strong>D</strong>uplication: duplicidad de codigo, no aplicar el principio DRY</li></ul><figure id="f8f4429b-5c24-4e2b-ad79-5ce97133b850" class="image"><a href="Section%203%20Acronimo%20STUPID%20Code%20Smells%20541193afb2d44e6aa99c40e29d652a2b/Untitled.png"><img style="width:1910px" src="Section%203%20Acronimo%20STUPID%20Code%20Smells%20541193afb2d44e6aa99c40e29d652a2b/Untitled.png"/></a></figure><h1 id="1e4bc208-a0b1-4b60-98fc-d807519b7544" class="">Porque el patron singleton es un code smells?</h1><div id="6c0c3790-3456-4555-96f9-26c05ae08d03" class="column-list"><div id="0ef9f1ec-134c-4d2c-8797-1e1b922552c3" style="width:50%" class="column"><h2 id="05080295-3347-4aa1-b585-0a18b0e5da27" class="">pros:</h2><p id="62506f6c-0210-4fc1-a7c4-cb4cc8cb76d2" class="">Garantiza una unica instancia de la clase a lo largo de toda la aplicacion</p></div><div id="1ccd58f4-06bf-4cbf-94f7-04ff2705e8f6" style="width:50%" class="column"><h2 id="029c1e56-22e0-4a49-b086-8640139606a5" class="">Contras</h2><ul id="9aafc2b1-7205-435f-abd4-62fe0a72698b" class="bulleted-list"><li style="list-style-type:disc">Vive en el contexto global</li></ul><ul id="6d3e38d4-06fe-45fa-8eb2-01f8c38dd26f" class="bulleted-list"><li style="list-style-type:disc">Puede ser modificado por cualquiera y en cualquier momento</li></ul><ul id="b9e04010-6622-4bcf-ae71-5dd70aa32aff" class="bulleted-list"><li style="list-style-type:disc">No es rastreable</li></ul><ul id="0980c6d6-be17-4a3b-9d32-873164bc67cf" class="bulleted-list"><li style="list-style-type:disc">Dificil de testear debido a su ubicacion.</li></ul></div></div><p id="86932f77-5f2c-4c01-9c37-434ab6a4955e" class="">
+</p><p id="ad172d85-b98d-469f-a996-1c840438638e" class="">
+</p><h1 id="a6324e44-8cca-48cf-a84c-32d9ca4ada67" class="">Bajo acoplamiento y buena cohesion</h1><p id="f95a6adc-6294-4795-82ce-2e0e6fa09f12" class="">En nuestro desarollo tenemos que buscar un bajo acomplamiento y buena cohesion</p><h3 id="93e36139-c222-4eaf-a83e-4b34467e8972" class="">Alto acoplamiento:</h3><p id="c148c8a2-1777-47e6-8df7-d5eaa75b9146" class="">desventajas:</p><ul id="91c3b13d-b029-4ac8-b119-03908a37f2bc" class="bulleted-list"><li style="list-style-type:disc">Un cambio en un modulo puede provocar un efecto domino de cambios en otros modulos</li></ul><ul id="dd9a3285-5316-4d1b-aa1d-de3b67706c7a" class="bulleted-list"><li style="list-style-type:disc">El ensamblaje de modulos puede requerir mas tiempos</li></ul><ul id="0ded1714-d75b-4880-a94d-c15c8eab084e" class="bulleted-list"><li style="list-style-type:disc">Los modulos llegan a ser dificil de reutilizar y/o probar porque se deben incluir modulos dependientes</li></ul><p id="473923ed-cd63-40db-8f6a-de3b61122f6e" class="">Posibles soluciones:</p><ul id="a009fbe7-33ca-4289-b6bc-d395e7895470" class="bulleted-list"><li style="list-style-type:disc"><strong>”A”</strong> tiene un atributo que se refiere a <strong>”B”</strong></li></ul><ul id="480aa0a6-625e-4ca6-870a-81b663714896" class="bulleted-list"><li style="list-style-type:disc"><strong>A”</strong> llama a los servicios de un objeto <strong>”B”</strong></li></ul><ul id="a6a196b9-b6da-4fe4-a850-1cba5f1dd1ea" class="bulleted-list"><li style="list-style-type:disc"><strong>A”</strong> tiene un metodo que hace referencia a  <strong>”B” ( a traves del tipo de retorno o parametro)</strong></li></ul><ul id="9e1939f3-03fc-41b3-a23b-eea3f543a15c" class="bulleted-list"><li style="list-style-type:disc"><strong>A</strong> es una subclase de (o implementa) la clase <strong>”B”</strong>.</li></ul><h3 id="9411ce6c-9b00-4043-b8ba-10fbad9e606b" class="">Cohesion:</h3><ul id="b9252f56-4830-4503-913f-671aba831119" class="bulleted-list"><li style="list-style-type:disc">La cohesion se refiere a lo que la clase (o modulo) puede hacer.</li></ul><ul id="3505a986-0878-4934-8364-611acf5f2cd6" class="bulleted-list"><li style="list-style-type:disc">La baja cohesion significaria que la clase realiza una gran variedad de acciones, <strong>No se enfoca en lo que debe hacer</strong>.</li></ul><ul id="365a99f3-b837-4037-865d-a459d04f286e" class="bulleted-list"><li style="list-style-type:disc">Alta cohesion significa que la clase se enfoca en lo que deberia esta haciendo, solo metodos asociados a la intencion de la clase</li></ul><figure id="5762c6f2-d82f-47da-97e6-5ccada0bf8db" class="image"><a href="Section%203%20Acronimo%20STUPID%20Code%20Smells%20541193afb2d44e6aa99c40e29d652a2b/Untitled%201.png"><img style="width:428px" src="Section%203%20Acronimo%20STUPID%20Code%20Smells%20541193afb2d44e6aa99c40e29d652a2b/Untitled%201.png"/></a></figure><h1 id="677421ce-9256-460f-90d2-c35f32721016" class="">Codigo no probable</h1><p id="c61af3ca-3fbb-47e2-ab4d-0b1506838c11" class="">Es codigo dificil de testear:</p><ul id="ecf27654-d9e5-42d5-bd7f-7c4fbcb59156" class="bulleted-list"><li style="list-style-type:disc">Producto de Codigo con alto acoplamiento</li></ul><ul id="9cde4129-759e-496c-ae49-a791cae8fb73" class="bulleted-list"><li style="list-style-type:disc">Codigo con muchas dependencias no inyectadas</li></ul><ul id="442aa368-8022-4e4d-869d-c3dee0d29aa3" class="bulleted-list"><li style="list-style-type:disc">Dependencias en el contexto global (tipo singleton)</li></ul><figure class="block-color-gray_background callout" style="white-space:pre-wrap;display:flex" id="7e739f71-62b4-4317-98a4-c487d695cca6"><div style="font-size:1.5em"><span class="icon">💡</span></div><div style="width:100%">Debemos de tener en mente las pruebas desde la creacion del codigo.</div></figure><h1 id="7c4fb40c-3344-4fdc-8ece-a60263ec39b7" class="">Optimizaciones prematuras</h1><figure class="block-color-gray_background callout" style="white-space:pre-wrap;display:flex" id="2e5163f3-b235-42f2-9d83-72c12d89dc8d"><div style="font-size:1.5em"><span class="icon">💡</span></div><div style="width:100%">Mantener abiertas las opciones retrasando la toma de decisiones nos permite darle mayor relevancia a lo que es mas importante en una aplicacion. ( las reglas del negocio)</div></figure><figure class="block-color-gray_background callout" style="white-space:pre-wrap;display:flex" id="876a9fc6-fbe2-439c-83af-8d9eac5f4bf9"><div style="font-size:1.5em"><span class="icon">💡</span></div><div style="width:100%">No debemos anticiparnos a los requisitos y desarrollar abstracciones innecesarias que puedan anadir complejidad accidental</div></figure><h3 id="1614e04f-c464-4e8d-a509-4c32036c5a53" class="">Complejidad esencial:</h3><p id="4001b796-273a-43de-a109-ed9f63be1960" class="">La complejidad es inherente al problema</p><h3 id="de909e29-89cf-415b-ad7e-5ae7617e73b5" class="">Complejidad accidental:</h3><p id="f2e666c9-b080-4a1b-a9fb-7024a35a13a4" class="">Cuando implementamos una solucion compleja a la minima indispensable</p><p id="178c65e9-301f-46cb-9eff-a198e79fbec3" class="">
+</p><h1 id="7434185e-8338-4526-9ee0-dfd689856c0c" class="">Nombres poco descriptivos</h1><ul id="fd02c384-722d-4d24-9870-715eb3d1310c" class="bulleted-list"><li style="list-style-type:disc">Nombre de variables mal nombradas</li></ul><ul id="7cb05e49-df20-40e6-aecc-3cc9d62941a7" class="bulleted-list"><li style="list-style-type:disc">Nombres de clases genericas</li></ul><ul id="2afb8294-8319-4110-803a-c0246367d32e" class="bulleted-list"><li style="list-style-type:disc">Nombres de funciones mal nombradas</li></ul><ul id="7c3720a4-b702-4213-a46c-8f081309dcbe" class="bulleted-list"><li style="list-style-type:disc">Ser muy especifico o demasiado generico</li></ul><p id="65b07dba-68f6-4040-923a-cb720b139352" class="">
+</p><h1 id="685bf7e3-def8-405c-9e0f-6f2b4bb59dbf" class="">Duplicidad del codigo:</h1><p id="698dcc1a-8ca6-4fb0-a5a2-68d9c4bc3a1e" class="">No aplicar el principio DRY</p><div id="2546f866-29ac-4bca-86c9-f08e7cb16724" class="column-list"><div id="7cdb1ee8-5038-461f-ae05-1e0b814dd571" style="width:100%" class="column"><h3 id="35e5bd90-8f3e-495e-a561-612c894533f9" class="">Real:(mala)</h3><ul id="a84e7588-b9fa-4218-b2bc-316578082fc5" class="bulleted-list"><li style="list-style-type:disc">Codigo es identico y cumple la misma funcion</li></ul><ul id="45d16175-f3cb-4460-8b5f-b281ac3d6bfa" class="bulleted-list"><li style="list-style-type:disc">Un cambio implicaria actualizar todo el codigo identico en varios lugares</li></ul><ul id="861e0470-64a3-4d6b-a62c-627907893e36" class="bulleted-list"><li style="list-style-type:disc">Incrementa posibilidades de error humano al olvidar una parte para actualizar</li></ul><ul id="f9d6484c-3a5a-43d9-9d6f-d376574a35da" class="bulleted-list"><li style="list-style-type:disc">Mayor cantidad de pruebas innecesarias</li></ul></div><div id="3da389bd-c6ad-4460-84e4-bcf06369c503" style="width:100%" class="column"><h3 id="2be64727-5afc-47f8-97fd-862d69d8030f" class="">Accidental: (Buena)</h3><ul id="3bc0d70d-bd2b-4df1-afc3-07810cd87821" class="bulleted-list"><li style="list-style-type:disc">Codigo luce similar pero cumple funciones distintas</li></ul><ul id="764f956b-f2f1-4880-8a6f-554577bef326" class="bulleted-list"><li style="list-style-type:disc">Cuando hay un cambio solo hay que modificar un solo lugar</li></ul><ul id="48bf36ab-a6e4-4a87-a2b0-7400fc589b90" class="bulleted-list"><li style="list-style-type:disc">Esta duplicidad se puede manejar con refactorizaciones u optimizaciones</li></ul><p id="ee86ebce-fcd1-4abe-8295-b1e5f9353f61" class="">
+</p></div></div><p id="da9492d7-41b3-4fa4-ae70-fbc0b43b616c" class="">
+</p><h1 id="c4d6fb79-74a5-4bb6-9abb-545e24ad6fd6" class="">Otros Code Smells</h1><h2 id="248cc137-468d-472d-a3ff-f58467abd3ae" class="">Inflacion </h2><h3 id="17bbd276-169a-4283-99e5-ced06302ab15" class="">cuando un metodo tiene demasiadas lineas</h3><p id="0d81433f-8d81-4b21-9fb1-f11bac95b2d9" class="">solucion dividir el metodo en varios metodos</p><figure id="b890ad45-2215-4825-b031-a5d674d2ba02" class="image"><a href="Section%203%20Acronimo%20STUPID%20Code%20Smells%20541193afb2d44e6aa99c40e29d652a2b/Untitled%202.png"><img style="width:1873px" src="Section%203%20Acronimo%20STUPID%20Code%20Smells%20541193afb2d44e6aa99c40e29d652a2b/Untitled%202.png"/></a></figure><h2 id="66f2e5c6-0784-4888-b3d8-d7aae3403e80" class="">Clases gigantes</h2><p id="235e4764-d2cb-4bb9-9de5-0ea511e648b8" class="">separar las clases</p><figure id="2c5790d2-d0e2-4cf1-a360-ab17146f1764" class="image"><a href="Section%203%20Acronimo%20STUPID%20Code%20Smells%20541193afb2d44e6aa99c40e29d652a2b/Untitled%203.png"><img style="width:1904px" src="Section%203%20Acronimo%20STUPID%20Code%20Smells%20541193afb2d44e6aa99c40e29d652a2b/Untitled%203.png"/></a></figure><h2 id="00b3aece-cffe-4e44-b7c1-75682500f6df" class="">Obsesion primitiva</h2><p id="217c3f0e-e426-4e8f-8673-4382ed9d95bc" class="">Se utilizand demasiados objetos primitivos en la clase y esto hace que se vuelva grande y dificil de comprender lo mejor es asociar estos a una clase o un modulo que nos permita tener un orden logico funcional y reusar estos.</p><figure id="4354dea0-4ebb-4a18-85e8-60f31286f9af" class="image"><a href="Section%203%20Acronimo%20STUPID%20Code%20Smells%20541193afb2d44e6aa99c40e29d652a2b/Untitled%204.png"><img style="width:1904px" src="Section%203%20Acronimo%20STUPID%20Code%20Smells%20541193afb2d44e6aa99c40e29d652a2b/Untitled%204.png"/></a></figure><h2 id="13ae76fe-6355-4b58-b24a-b7f80ea407cc" class="">Lista larga de parametros</h2><p id="8f02158f-31c3-43da-afb9-d4ad830b7efc" class="">Mas de 3 o 4 argumentos en un metodo</p><figure id="53ab3371-f9de-49b8-bb2e-223fbf1028f1" class="image"><a href="Section%203%20Acronimo%20STUPID%20Code%20Smells%20541193afb2d44e6aa99c40e29d652a2b/Untitled%205.png"><img style="width:1904px" src="Section%203%20Acronimo%20STUPID%20Code%20Smells%20541193afb2d44e6aa99c40e29d652a2b/Untitled%205.png"/></a></figure><h1 id="6560d571-ef8d-4d98-9a17-dbe8091a7b4c" class="">Acopladores:</h1><p id="0b5a9266-07b2-4d42-a623-c1fb016a0bae" class="">Todos los olores de este grupo contribuyen al acoplamiento excesivo entre clases o muestran lo que sucede si el acoplamiento se reemplaza por una delegacion excesiva.</p><h2 id="858d8fd7-c480-4401-8923-54c577e3b3b6" class="">Feature Envy</h2><p id="b3dd1852-a653-4d4f-aa48-97c996d601b1" class="">Esto es cuando un modulo clase o funccion hace excesiva referencia a una funcion de otro modulo</p><h2 id="449c22af-f295-4560-8360-d569103bea87" class="">Intimidad inapropiada</h2><p id="2501e1a0-73cc-4f32-9668-dc3bad1797bd" class="">Es cuando una clase o metodo usa campos internos de otra clase.</p><figure id="f43c10a4-cc14-413e-b108-43d0ea744a69" class="image"><a href="Section%203%20Acronimo%20STUPID%20Code%20Smells%20541193afb2d44e6aa99c40e29d652a2b/Untitled%206.png"><img style="width:1904px" src="Section%203%20Acronimo%20STUPID%20Code%20Smells%20541193afb2d44e6aa99c40e29d652a2b/Untitled%206.png"/></a></figure><h2 id="c9d1f1e4-7263-42f2-903a-8d4224e9db51" class="">Cadenas de mensajes</h2><p id="6eb0db67-b0f2-4b17-8091-0f67eaa8d666" class="">es una cadena de llamadas de funciones, una funcion A que llama a B que llama a C, esto se soluciona con comunicacciones directas entre estas para no tener que pasar por puentes de funciones o metodos para poder llegar a la funcion deseada</p><figure id="efb43c67-ad4a-4a42-b286-4862d0dfc96c" class="image"><a href="Section%203%20Acronimo%20STUPID%20Code%20Smells%20541193afb2d44e6aa99c40e29d652a2b/Untitled%207.png"><img style="width:1904px" src="Section%203%20Acronimo%20STUPID%20Code%20Smells%20541193afb2d44e6aa99c40e29d652a2b/Untitled%207.png"/></a></figure><h2 id="4f936790-178c-4c1e-8059-d5d8c0ef5c43" class="">The middle man</h2><p id="a4f81173-f7a4-41a8-aff7-30f2cd6e1c3d" class="">El uso de una clase para llamar a otra clase:</p><figure id="e5041c86-3fad-4c6c-ba61-9c8a0726bd2f" class="image"><a href="Section%203%20Acronimo%20STUPID%20Code%20Smells%20541193afb2d44e6aa99c40e29d652a2b/Untitled%208.png"><img style="width:1904px" src="Section%203%20Acronimo%20STUPID%20Code%20Smells%20541193afb2d44e6aa99c40e29d652a2b/Untitled%208.png"/></a></figure></div></article><span class="sans" style="font-size:14px;padding-top:2em"></span></body></html>

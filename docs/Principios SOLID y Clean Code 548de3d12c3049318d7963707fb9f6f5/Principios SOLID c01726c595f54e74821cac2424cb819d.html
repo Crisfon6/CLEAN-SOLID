@@ -1,0 +1,734 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Principios SOLID</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	padding-inline-start: 0;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.page-description {
+    margin-bottom: 2em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+	empty-cells: show;
+}
+.simple-table td {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table th {
+	height: 29px;
+	min-width: 120px;
+}
+
+.simple-table-header-color {
+	background: rgb(247, 246, 243);
+	color: black;
+}
+.simple-table-header {
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	max-height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(120, 119, 116, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(159, 107, 83, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(217, 115, 13, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 145, 47, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(68, 131, 97, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(51, 126, 169, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(144, 101, 176, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(193, 76, 138, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(212, 76, 71, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-uiBlue { background-color: rgba(35, 131, 226, .07); }
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-translucentGray { background-color: rgba(255, 255, 255, 0.0375); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+.select-value-color-pageGlass { background-color: undefined; }
+.select-value-color-washGlass { background-color: undefined; }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="c01726c5-95f5-4e74-821c-ac2424cb819d" class="page sans"><header><div class="page-header-icon undefined"><span class="icon">🧢</span></div><h1 class="page-title">Principios SOLID</h1><p class="page-description"></p></header><div class="page-body"><p id="dbe8b8ac-2eb6-4504-864b-40ae45344d7d" class="">En esta sección hablaremos al fin sobre los principios S.O.L.I.D.</p><p id="0deef16a-6fde-4f58-9942-76e3bb919a21" class="">Cada principio básicamente cuenta de 3 partes, una exposición, un ejercicio y cómo detectar violaciones al principio, algunos son bastante obvios y otros tienen un poco más de complejidad, pero no dejen que los nombres los asusten, son fáciles de comprender con la práctica.</p><p id="0eb2bfcb-fd4c-482c-86fb-e49c97d73ce4" class="">Los <strong>5 principios S.O.L.I.D.</strong> de diseño de software son:</p><ul id="40567723-a48e-4ab1-a9bf-25f798b61b6c" class="bulleted-list"><li style="list-style-type:disc">S – Single Responsibility Principle (SRP)</li></ul><ul id="87fc7b16-cda5-4930-8a6a-012768c00652" class="bulleted-list"><li style="list-style-type:disc">O – Open/Closed Principle (OCP)</li></ul><ul id="0ac52e7a-b1c0-49cb-a104-2210d84de628" class="bulleted-list"><li style="list-style-type:disc">L – Liskov Substitution Principle (LSP)</li></ul><ul id="9e26e86b-c088-45de-88ca-911a7aedc028" class="bulleted-list"><li style="list-style-type:disc">I – Interface Segregation Principle (ISP)</li></ul><ul id="6c2e47d3-86d1-4026-b182-9945e6ad7761" class="bulleted-list"><li style="list-style-type:disc">D – Dependency Inversion Principle (DIP)</li></ul><p id="254ba37a-1694-4523-8e35-306da643f3c2" class="">Y en esta sección hablaremos sobre cada uno de ellos.</p><p id="a401a666-2c92-4741-84d6-90a3244b3b0a" class="">Los principios solid buscan resolver todos los code smells y ademas que nuestro codigo tenga la calidad esperada</p><h1 id="a99cf937-91a9-48b3-ba43-8add59c3e96f" class="">Single Responsability Principle (SRP)</h1><figure class="block-color-gray_background callout" style="white-space:pre-wrap;display:flex" id="4f9dfc33-ca31-4bba-8400-0481bcb5d622"><div style="font-size:1.5em"><span class="icon">💡</span></div><div style="width:100%">Una clase deberia tener una unica responsabilidad<br/>”tener una unica responsabilidad” ≠≠≠”hacer una unica cosa”<br/></div></figure><p id="94b386f3-6f65-4582-8dc8-652dce7d5013" class="">Entonces para esto tenemos que definir muy bien nuestras clases pensar en si las responsabilidades que esta teniendo son las que deberia o esta ocupando de mas, implementar servicios u otras clases, la logica de creacion en base de o consultas deben ir en servicios no en la clase debido a que esto podria cambiar y no queremos tocar de a mucho nuestra clase</p><h2 id="1685288c-81bb-41c4-89a2-bb035d169cee" class="">Como detectar violaciones del principio SRP.</h2><ul id="2d5beb41-1882-481f-82c5-2bb7a12d6f50" class="bulleted-list"><li style="list-style-type:disc">Nombre de clases y modulos demasiados genericos</li></ul><ul id="268941f7-f4ac-46a5-9a4f-9e8fe4abb920" class="bulleted-list"><li style="list-style-type:disc">Cambios en el codigo suelen afectar la clase o modulo, se necesitan muchas modificaciones para aplicar una nueva feature</li></ul><ul id="3275989a-4412-4701-9fad-fa1585954aa1" class="bulleted-list"><li style="list-style-type:disc">la clase involucra multiples capas, la clase hace muchas cosas demasiadas interacciones.</li></ul><ul id="d112cfca-3fd2-495c-b4c8-9a8b0473cd48" class="bulleted-list"><li style="list-style-type:disc">Numero elevado de importaciones</li></ul><ul id="092afa30-793e-4f26-b2bc-5c5d0fbc0e48" class="bulleted-list"><li style="list-style-type:disc">Cantidad elevada de metodos publicos. La clase o modulo hace muchas cosas.</li></ul><ul id="0dbfbed2-6d8d-4d01-907f-d0744a2883a1" class="bulleted-list"><li style="list-style-type:disc">Excesivo numero de lineas de codigo.</li></ul><h1 id="d8bfcfd7-94c2-469d-8d34-f750941fe84f" class="">Principio Open and Close / Abierto y Cerrado</h1><p id="a1c61213-2475-4133-a4a6-adb0317c382a" class="">Depende mucho del contexto</p><ul id="456cffdf-cef1-41b2-a29e-9a3f34398d76" class="bulleted-list"><li style="list-style-type:disc">Establece que las entidades de software(clases, modulos, metodos, etc…) deben estar abiertas a la extension, pero cerradas para la modificacion.</li></ul><ul id="63512e51-8ec8-46e9-8ec0-80b984792798" class="bulleted-list"><li style="list-style-type:disc">Esto establece que tienes que pensar tus clases metodos, etc… para que no tenga que ser modificados cuando los requerimientos cambien.</li></ul><ul id="81c2caa4-9533-4ae0-b332-873f5e98f792" class="bulleted-list"><li style="list-style-type:disc">Este principio dice que si ya cerraste una entidad de software esta no se deberia de modificar para agregar nuevas funcionalidades si no que esta deberia de extender en una nueva clase la cual impemente esta nueva caracteristica.</li></ul><ul id="0c672f02-283c-4c96-9657-61a8ee412b0f" class="bulleted-list"><li style="list-style-type:disc">Este principio tambien se puede lograr usando herencia o el patron de diseno de composicion.</li></ul><ul id="55ca10b1-081c-468c-91b2-65a1fe34ee3a" class="bulleted-list"><li style="list-style-type:disc">No debemos depender fuertemente de librerias de terceros, para cuando usamos una libreira de terceros usamos el patron adaptador donde creamos la implementacion de esta asi cuando queramos modificar esta libreria simplemente modificamos unicamente esta clase y las demas clases implementan el adaptador haciendo que no dependan de la libreria externa si no de nuestro adpatador.un ejemplo de esta es el siguiente donde para hacer peticiones http creamos una clase http y no usamos los la libreria axios o el api fetch directamente por si en algun momento quermos cambiar la manera de hacer estas peticiones http.</li></ul><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="91a29831-f28a-4be5-83c1-f7a61c68a676" class="code"><code class="language-TypeScript">// import axios from &quot;axios&quot;;
+
+export class HttpClient{
+    // async get(url:string){
+    //     const {data,status} = await axios.get(url);
+    //     return {data, status};
+    // }
+    async get(url:string){
+        const resp = await await fetch(url);
+        const data = await resp.json();
+        return {data,status:resp.status};
+    }
+}</code></pre><h2 id="1bd2aec0-0d55-4d63-b9b0-691b2df29e33" class="">Detectar violaciones del prinicipio Open and Close</h2><ul id="35bd5db0-884a-4564-8d4d-025f9196430d" class="bulleted-list"><li style="list-style-type:disc">Cambios normalmente afectan nuestra clase o modulo</li></ul><ul id="7b9b8084-83bb-4b15-9523-938afa597dd1" class="bulleted-list"><li style="list-style-type:disc">Cuando una clase o modulo afecta muchas capas.</li></ul><h1 id="bcc54011-d4b1-4a8d-9a2c-d67267e9c829" class="">Principio de Liskov substitution / Sustitucion de Liskov</h1><figure class="block-color-gray_background callout" style="white-space:pre-wrap;display:flex" id="990eb1ed-eaa4-4b46-8379-d954b8fbf4aa"><div style="font-size:1.5em"><span class="icon">💡</span></div><div style="width:100%">Siendo <strong>U</strong> un subtipo de <strong>T,</strong> cualquier instancia de <strong>T</strong> deberia poder ser sustituida por cualquier instancia de <strong>U</strong> sin alterar las propiedades del sistema.</div></figure><h1 id="bc108689-36b0-47d4-8fe4-191c6812c1aa" class="">Principio de segregacion de la interfaz</h1><p id="57e350d6-62c8-4028-9649-6046b7070b8b" class="">Esto es mas que todo para lenguajes fuertemente tipados</p><figure class="block-color-gray_background callout" style="white-space:pre-wrap;display:flex" id="14361141-05c2-4ddd-bd2f-54d900fce70c"><div style="font-size:1.5em"><span class="icon">💡</span></div><div style="width:100%">Este principio establece que los clientes no deberian verse forzados a depender de interfaces que no usan</div></figure><p id="887ea071-f448-4e24-8b9a-99ffe12d9b11" class="">Este principio nos dice que si implementamos una interfaz en una clase donde esa clase no tenga que implementar metodos de que estan en la interfaz estos metodos tienen que ser segregados en otra interfaz la cual tenga estos y asi nuestra clase no tenga que implementar estos metodos que nunca va a utilizar.</p><p id="be4f350f-8b9c-4a33-b625-66aa9b0ebb88" class="">Las clases no se deben de ver obligadas a implementar metodos que no van a utilizar.</p><p id="ea779478-c1fe-4786-bbde-47f055c46664" class="">Ejemplo:</p><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="0f4bfc9a-8c3a-45e2-b815-ee06c45eb700" class="code"><code class="language-TypeScript">//Bad:
+interface Bird{
+    fly():void
+    eat():void
+    run():void
+}
+
+class Tucan {
+    public fly(){}
+    public eat(){}
+    public run(){}
+}
+class Hummingbird{
+    public fly(){}
+    public eat(){}
+    public run(){}
+}</code></pre><script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js" integrity="sha512-7Z9J3l1+EYfeaPKcGXu3MS/7T+w19WtKQY/n+xzmw4hZhJ9tyYmcUS+4QqAlzhicE5LAfMQSF3iFTK9bQdTxXg==" crossorigin="anonymous" referrerPolicy="no-referrer"></script><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism.min.css" integrity="sha512-tN7Ec6zAFaVSG3TpNAKtk4DOHNpSwKHxxrsiw4GHKESGPs5njn/0sMCUMl2svV4wo4BK/rCP7juYz+zx+l6oeQ==" crossorigin="anonymous" referrerPolicy="no-referrer"/><pre id="7a0b19e8-65a6-44f9-8e67-eef31acb0c67" class="code"><code class="language-TypeScript">//Better:
+interface Bird{
+    eat():void;    
+}
+interface FlyingBird{
+    fly(): void;
+}
+interface RuningBird{
+    run():void;
+}
+interface SwimingBird{
+    swim():void;
+}
+
+class Tucan implements Bird, FlyingBird{
+    public fly(){}
+    public eat(){}
+}
+class Hummingbird implements Bird, FlyingBird{
+    public fly(){}
+    public eat(){}
+}
+
+class Ostrich implements Bird, RuningBird{
+    public eat(){}
+    public run(){}
+}
+class Penguin implements Bird, SwimingBird{
+    public eat(){}
+    public swim(): void {}
+}</code></pre><h2 id="97fb17d0-fb63-42db-925b-07ea04f8d715" class="">Detectar violaciones ISP / Principio de segregacion de interfaz</h2><ul id="cd678d71-8175-4b53-8d88-ae6c9f643356" class="bulleted-list"><li style="list-style-type:disc">Si las interfaces que disenamos nos oblifan a violar los principios de responsabilidad unica y substitucion de Liskov</li></ul></div></article><span class="sans" style="font-size:14px;padding-top:2em"></span></body></html>
